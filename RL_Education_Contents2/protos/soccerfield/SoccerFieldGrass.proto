@@ -1,0 +1,127 @@
+#VRML_SIM R2019a utf8
+#Author(s):         Inbae Jeong, Chansol Hong
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+# tags: static
+
+PROTO SoccerFieldGrass [
+  field SFVec3f    translation 0 0 0
+  field SFRotation rotation 0 1 0 0
+  field SFVec3f    scale 1 1 1
+
+  # fields specific to SoccerField
+  field SFFloat  blockSize 0.5
+  field SFFloat  length 9
+  field SFFloat  width 5.8
+
+  # fields specific to the floor logo
+  field SFBool   useBanner FALSE
+  field SFString url "textures/logo.png"
+  field SFFloat  bannerLength 0.3
+  field SFFloat  bannerWidth  1.2
+  field SFFloat  bannerHeight 0.0004
+]
+{
+  %{
+    local bs = fields.blockSize.value
+    local l  = fields.length.value
+    local w  = fields.width.value
+
+    local bn = math.floor(l / (2 * bs))
+    local ll = math.max(0, l / 2 - bs * bn)
+
+    local ub = fields.useBanner.value
+    local url = fields.url.value
+    local bl = fields.bannerLength.value
+    local bw = fields.bannerWidth.value
+    local bh = fields.bannerHeight.value
+  }%
+  Slot {
+    type "soccer_field_grass"
+    endPoint Transform {
+      translation IS translation
+      rotation IS rotation
+      scale IS scale
+      children [
+        %{ local m = 1 }%
+        %{ for k = 0, 1 do }%
+          %{ for i = 0, bn - 1 do }%
+          Transform {
+            translation %{=m * (i * bs + bs / 2)}% 0 0
+            children [
+              Shape {
+                appearance RoughConcrete{
+                  %{if i % 2 == k then}%
+                   colorOverride 0.383 0.391 0.375
+                  %{else}%
+                   colorOverride 0.444 0.453 0.425
+                  %{end}%
+                  textureTransform TextureTransform {
+                      scale 1 9
+                  }
+                }
+                geometry Plane {
+                  size %{=bs}% %{=w}%
+                }
+              }
+            ]
+          }
+          %{ end }%
+
+          %{ if ll > 0 then }%
+          Transform {
+            translation %{=m * (bn * bs + ll / 2)}% 0 0
+            children [
+              Shape {
+                appearance RoughConcrete{
+                  %{if bn % 2 == k then}%
+                   colorOverride 0.267 0.286 0.196
+                  %{else}%
+                   colorOverride 0.211 0.227 0.157
+                  %{end}%
+                  textureTransform TextureTransform {
+                      scale 1 9
+                  }
+                }
+                geometry Plane {
+                  size %{=ll}% %{=w}%
+                }
+                castShadows IS castShadows
+              }
+            ]
+          }
+          %{ end }%
+
+          %{ m = -1 }%
+        %{ end }%
+        %{ if ub then}%
+        %{ for i = -1, 1, 2 do }%
+        %{ for j = -1, 1, 2 do }%
+          Transform {
+            %{
+              local bias
+              if j < 0 then
+                bias = w/24
+              else
+                bias = w/24
+              end
+            }%
+            translation %{=i*(l/2 - ll/2)}% %{=bh}% %{=j*(w/3.5) - bias}%
+            rotation 0 1 0 %{=-i*math.pi/2}%
+            children [
+              Shape {
+                appearance Grass {
+                  colorOverride 0.333 0.341 0.325
+                }
+                geometry Plane {
+                  size %{=bw}% %{=bl}%
+                }
+              }
+            ]
+          }
+        %{ end }%
+        %{ end }%
+        %{ end }%
+      ]
+    }
+  }
+}

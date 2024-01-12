@@ -1,0 +1,13 @@
+#VRML_SIM R2018a utf8
+
+PROTO BlueMetal [
+]
+{
+  Appearance {
+    material Material {
+      ambientIntensity 0.940419733524
+      diffuseColor 0 0 1
+      shininess 0.5
+    }
+  }
+}

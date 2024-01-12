@@ -1,0 +1,18 @@
+#VRML_SIM R2019a utf8
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+
+PROTO SilverBlue [
+]
+{
+  Appearance {
+    material Material {
+      ambientIntensity 1
+      diffuseColor 0.2 0.2 0.2
+      emissiveColor 0.5 0.5 0.5
+      shininess 0.5
+      specularColor 0 0 0.5
+    }
+  }
+}
+
+

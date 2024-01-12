@@ -1,0 +1,178 @@
+#VRML_SIM R2018b utf8
+#Author(s):         Inbae Jeong, Chansol Hong
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+# tags: static
+
+PROTO SoccerField [
+  # fields inherited from Solid: Default values are set according to the corresponding default values of Solid
+  field SFVec3f    translation 0 0 0
+  field SFRotation rotation 0 1 0 0
+  field SFVec3f    scale 1 1 1
+  # children
+  field SFString name "soccer_field"
+  field SFString model ""
+  field SFString description ""
+  # contactMaterial
+  field MFNode immersionProperties [ ]
+  # boundingObject
+  # physics
+  field SFBool locked TRUE
+  field SFFloat radarCrossSection 0.0
+  field MFColor recognitionColors []
+  field SFFloat translationStep 0.01 # m
+  field SFFloat rotationStep 0.261799387 # pi/12 rad
+
+  # fields specific to SoccerField
+  field SFFloat  fieldLength 2.2
+  field SFFloat  fieldWidth 1.8
+  field SFFloat  floorLength 2.55
+  field SFFloat  floorWidth 1.85
+  field SFFloat  floorThickness 0.025
+  field SFFloat  robotCeiling 0.4 # hieght of virtual ceiling for the robots
+  field SFFloat  ballCeiling 0.8 # height of virtual ceiling for the ball
+  field SFNode   floorAppearance Black { }
+
+  field SFFloat  centerDotRadius 0.01
+  field SFFloat  centerCircleRadius 0.25
+  field SFFloat  centerCircleSubdivision 12
+  field SFFloat  penaltyAreaDepth 0.35
+  field SFFloat  penaltyAreaWidth 0.8
+  field SFFloat  goalAreaDepth 0.15
+  field SFFloat  goalAreaWidth 0.5
+  field SFFloat  penaltyArcProportion 0.25
+  field SFFloat  penaltyArcSubdivision 7
+
+  field SFNode   lineAppearance White { }
+  field SFFloat  lineThickness 0.01
+  field SFFloat  lineHeight 0.001
+
+  field MFNode   soccerFieldWall [
+    DEF DEF_WALL Group {
+      children [
+        SoccerFieldWall { }
+      ]
+    }
+    DEF DEF_VISWALL Group {
+      children [
+        VisualWall { }
+      ]
+    }
+  ]
+
+  field SFNode   grassSlot NULL
+  field SFFloat  grassHeight 0.001
+
+  field SFString floorContactMaterial "default"
+]
+{
+  %{
+    local rc = fields.robotCeiling.value
+    local bc = fields.ballCeiling.value
+    local fl = fields.floorLength.value
+    local fw = fields.floorWidth.value
+    local ft = fields.floorThickness.value
+  }%
+  Solid {
+    translation IS translation
+    rotation IS rotation
+    scale IS scale
+
+    children [
+      DEF SHAPES Group {
+        children [
+          Group {
+            children IS soccerFieldWall
+          }
+          DEF GRASSSLOT Transform {
+            translation 0 %{=fields.grassHeight.value}% 0
+            children [
+              Slot {
+                type "soccer_field_grass"
+                endPoint IS grassSlot
+              }
+            ]
+          }
+          DEF FIELDLINES SoccerFieldLine {
+            length IS fieldLength
+            width IS fieldWidth
+            centerDotRadius IS centerDotRadius
+            centerCircleRadius IS centerCircleRadius
+            centerCircleSubdivision IS centerCircleSubdivision
+            penaltyAreaDepth IS penaltyAreaDepth
+            penaltyAreaWidth IS penaltyAreaWidth
+            goalAreaDepth IS goalAreaDepth
+            goalAreaWidth IS goalAreaWidth
+            penaltyArcProportion IS penaltyArcProportion
+            penaltyArcSubdivision IS penaltyArcSubdivision
+
+            lineAppearance IS lineAppearance
+            lineThickness IS lineThickness
+            lineHeight IS lineHeight
+          }
+          DEF FLOOR Group {
+            children [
+              Transform { # floor
+                translation 0 %{=-ft / 2}% 0
+                children [
+                  Shape {
+                    appearance IS floorAppearance
+                    geometry Box {
+                      size %{=fl}% %{=ft}% %{=fw}%
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+      DEF BOUNDINGOBJECTS Group {
+        children [
+          DEF FLOOR Solid {
+            contactMaterial IS floorContactMaterial
+            boundingObject Plane {
+              size %{=fl}% %{=fw}%
+            }
+            name "floor"
+          }
+          DEF ROBOTCEILING Solid {
+            contactMaterial IS floorContactMaterial
+            boundingObject Transform { # ceiling for the robot
+              translation 0 %{=rc}% 0
+              rotation 1 0 0 %{=math.pi}%
+              children [
+                Plane {
+                  size %{=fl}% %{=fw}%
+                }
+              ]
+            }
+            name "robotceiling"
+          }
+          DEF BALLCEILING Solid {
+            contactMaterial IS floorContactMaterial
+            boundingObject Transform { # ceiling for the ball
+              translation 0 %{=bc}% 0
+              rotation 1 0 0 %{=math.pi}%
+              children [
+                Plane {
+                  size %{=fl}% %{=fw}%
+                }
+              ]
+            }
+            name "ballceiling"
+          }
+        ]
+      }
+    ]
+    name IS name
+    model IS model
+    description IS description
+    immersionProperties IS immersionProperties
+    physics NULL
+    locked IS locked
+    radarCrossSection IS radarCrossSection
+    recognitionColors IS recognitionColors
+    translationStep IS translationStep
+    rotationStep IS rotationStep
+  }
+}

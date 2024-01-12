@@ -1,0 +1,13 @@
+#VRML_SIM R2018a utf8
+
+PROTO BluePaint [
+]
+{
+  Appearance {
+    material Material {
+      ambientIntensity 0.715026855469
+      diffuseColor 0.152941182256 0.152941182256 0.749019622803
+      shininess 0
+    }
+  }
+}

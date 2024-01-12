@@ -1,0 +1,13 @@
+#VRML_SIM R2019a utf8
+#Author(s):         Inbae Jeong
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+
+PROTO Black [
+]
+{
+  Appearance {
+    material Material {
+      diffuseColor 0 0 0
+    }
+  }
+}

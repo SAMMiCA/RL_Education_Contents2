@@ -1,0 +1,14 @@
+#VRML_SIM R2019a utf8
+#Author(s):         Chansol Hong
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+
+PROTO LightGray [
+]
+{
+  Appearance {
+    material Material {
+      ambientIntensity 0.75
+      diffuseColor 0.9 0.9 0.9
+    }
+  }
+}

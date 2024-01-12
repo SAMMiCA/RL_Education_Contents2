@@ -1,0 +1,15 @@
+#VRML_SIM R2019a utf8
+
+PROTO SpaceBackground [
+]
+{
+  Background {
+    skyColor 0.33 0.66 1
+    backUrl "textures/cubic/space_test_back.jpg"
+    bottomUrl "textures/cubic/space_test_bottom.jpg"
+    frontUrl "textures/cubic/space_test_front.jpg"
+    leftUrl "textures/cubic/space_test_left.jpg"
+    rightUrl "textures/cubic/space_test_right.jpg"
+    topUrl "textures/cubic/space_test_top.jpg"
+  }
+}

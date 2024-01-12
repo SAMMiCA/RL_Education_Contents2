@@ -1,0 +1,86 @@
+#VRML_SIM R2018b utf8
+#Author(s):         Chansol Hong
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+# tags: static
+
+PROTO VisualWall [
+  field SFVec3f    translation 0 0 0
+  field SFRotation rotation 0 1 0 0
+  field SFVec3f    scale 1 1 1
+  
+  field SFFloat    length 2.2
+  field SFFloat    width 1.8
+  field SFFloat    bannerHeight 0.2
+  field SFFloat    goalWidth 0.4
+  field SFFloat    bannerThickness 0.025
+  field SFFloat    frameThickness 0.01
+  
+  field SFFloat    gpTranslation 1.21
+  field SFFloat    gpScale 1
+
+  field SFBool     castShadows FALSE
+  field SFBool     bannerWall  FALSE
+  field SFBool     bannerFront FALSE
+  field SFBool     bannerBehind FALSE
+
+  field SFInt32    bannerHorizontal 8
+  field SFInt32    bannerVertical   2
+
+  field SFFloat    cornerLength 0.07
+
+
+  field SFNode     frameAppearance LightGray { }
+  
+  field MFString   url ["textures/kaist.png"]
+  field SFString   name "banner_wall"
+]
+{
+  %{
+    local l    = fields.length.value
+    local w    = fields.width.value
+    local bh   = fields.bannerHeight.value
+    local gw   = fields.goalWidth.value
+    local bt   = fields.bannerThickness.value
+    local gpt  = fields.gpTranslation.value
+    local gps  = fields.gpScale.value
+    local bw   = fields.bannerWall.value
+    local bhor = fields.bannerHorizontal.value
+    local bver = fields.bannerVertical.value
+    local cl   = fields.cornerLength.value
+    local url  = fields.url.value
+    
+    local n_urls = 0
+    for _,_ in pairs(url) do
+      n_urls = n_urls + 1
+    end
+    
+    local l_trim = l - 2*cl
+    local w_trim = w - 2*cl - 2*bt - gw
+    
+    local banner_counter = 0
+  }%
+  Solid {
+    translation IS translation
+    rotation IS rotation
+    name IS name
+    children [
+      Group { # goalposts
+        children [
+          Goalpost {
+            translation %{=-gpt}% 0 0
+            scale %{=gps}% %{=gps}% %{=gps}%
+            castShadows IS castShadows
+            name "goalpost_left"
+          }
+          Goalpost {
+            translation %{=gpt}% 0 0
+            scale %{=gps}% %{=gps}% %{=gps}%
+            rotation 0 1 0 3.141592635
+            castShadows IS castShadows
+            name "goalpost_right"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+#VRML_SIM R2018a utf8
+
+PROTO RedMetal [
+]
+{
+  Appearance {
+    material Material {
+      ambientIntensity 0.940419733524
+      diffuseColor 1 0 0
+      shininess 0.5
+    }
+  }
+}

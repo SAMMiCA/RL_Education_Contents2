@@ -1,0 +1,26 @@
+#VRML_SIM R2018a utf8
+#Author(s):         Inbae Jeong
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+
+# An orange ball with customizable radius.
+# Created by inbae.jeong@gmail.com
+
+PROTO SoccerBallOrangeShape [
+  field SFFloat radius 0.02135
+  field SFInt32 subdivision 3
+  field SFString name "orange_shape"
+]
+{
+  Solid {
+    children [
+      Shape {
+        appearance Orange { }
+        geometry Sphere {
+          radius IS radius
+          subdivision IS subdivision
+        }
+      }
+    ]
+    name IS name
+  }
+}

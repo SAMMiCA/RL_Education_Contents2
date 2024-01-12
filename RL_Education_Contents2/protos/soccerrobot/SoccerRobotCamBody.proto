@@ -1,0 +1,36 @@
+#VRML_SIM R2020a utf8
+#Author(s):         Chansol Hong
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+
+PROTO SoccerRobotCamBody [
+  field SFFloat height 0.42
+  field SFFloat bodySize 0.26
+  field SFFloat distanceToPatch 0.001
+  field SFBool castShadows FALSE
+
+  field SFString name "cam_body"
+]
+{
+  %{
+    local h = fields.height.value
+    local bs = fields.bodySize.value
+    local dp = fields.distanceToPatch.value
+  }%
+  Solid {
+    children [
+      Transform {
+        translation 0 0.175 0
+        children [
+          Shape {
+            appearance Black { }
+            geometry Box {
+              size 0.26 0.42 0.26
+            }
+            castShadows IS castShadows
+          }
+        ]
+      }
+    ]
+    name IS name
+  }
+}

@@ -1,0 +1,80 @@
+#VRML_SIM R2020a utf8
+#Author(s):         Inbae Jeong, Chansol Hong
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+# tags: static
+
+PROTO SoccerRobotNumberPatch [
+  # fields inherited from Shape
+  field SFBool castShadows FALSE
+
+  # fields specific to Patch
+  field SFFloat length 0.073
+  field SFFloat width 0.073
+  # field SFFloat radius 0.0575
+  field SFString role "GK"
+  field SFBool isTeamTagRed TRUE
+  field SFBool groundpatch FALSE
+  field SFString name "number_patch"
+]
+{
+  %{
+    -- local variable
+    local isTeamTagRed = fields.isTeamTagRed.value
+    local groundpatch = fields.groundpatch.value
+  }%
+  Solid {
+    rotation 0 1 0 %{=math.pi/2}%
+    name IS name
+    children [
+      DEF TEAMPATCH_FRONT Transform {
+        translation 0 0.236 0.043
+        rotation -1 0 0 %{=-math.pi/2}%
+        children [
+          Shape {
+            appearance Appearance {
+              material Material {}
+              texture ImageTexture {
+                %{
+                  local color
+                  if isTeamTagRed then color = 'red' else color = 'blue' end
+                }%
+                url [ "textures/%{=color}%_%{=fields.role.value}%.png" ]
+              }
+            }
+            geometry Plane {
+              size 0.05 0.05
+            }
+            castShadows IS castShadows
+          }
+        ]
+      }
+      %{ if groundpatch then }%
+      DEF TEAMPATCH_ground Transform {
+        translation 0 -0.0875 0
+        rotation 0 1 0 %{=2*math.pi/2}%
+        children [
+          Shape {
+            appearance Appearance {
+              material Material {
+                transparency  0.5
+              }
+              texture ImageTexture {
+                %{
+                  local color
+                  if isTeamTagRed then color = 'red' else color = 'blue' end
+                }%
+                url [ "textures/color/%{=color}%_%{=fields.role.value}%.png" ]
+              }
+            }
+            geometry Plane {
+              size 0.4 0.4
+            }
+            castShadows IS castShadows
+          }
+        ]
+      }
+      %{ end }%
+    ]
+  }
+}
+

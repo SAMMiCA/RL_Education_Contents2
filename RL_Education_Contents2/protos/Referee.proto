@@ -1,0 +1,32 @@
+#VRML_SIM R2019a utf8
+#Author(s):         Inbae Jeong, Chansol Hong
+#Maintainer:        Chansol Hong (cshong@rit.kaist.ac.kr)
+
+PROTO Referee [
+  # fields inherited from Supervisor
+  field SFVec3f    translation         0 0 0
+  field SFRotation rotation            0 1 0 0
+  field SFVec3f    scale               1 1 1
+  field MFNode     children            [ ]
+  field SFString   name                "referee"
+  field SFString   model               ""
+  field SFString   description         ""
+  field SFString   customData          ""
+  field SFString   controller          ""
+  field SFBool     synchronization     TRUE
+]
+{
+  Robot {
+    translation     IS translation
+    rotation        IS rotation
+    scale           IS scale
+    children        IS children
+    name            IS name
+    model           IS model
+    description     IS description
+    customData      IS customData
+    controller      IS controller
+    synchronization IS synchronization
+    supervisor         TRUE
+  }
+}
